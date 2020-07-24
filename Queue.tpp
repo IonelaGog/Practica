@@ -4,7 +4,7 @@
 
 template <typename TValue, template <typename> typename TContainer>
 Queue<TValue, TContainer>::Queue(){
-    m_container = NULL;
+    
 }
 
 template <typename TValue, template <typename> typename TContainer>
@@ -15,7 +15,7 @@ Queue<TValue, TContainer>::Queue(const Queue& rhs)
 
 template <typename TValue, template <typename> typename TContainer>
 Queue<TValue, TContainer>::~Queue(){
-    delete [] m_container;
+    
 }
 
 template <typename TValue, template <typename> typename TContainer>
@@ -43,7 +43,6 @@ T Queue<T,TContainer>::pop(){
 template <typename T, template <typename> typename TContainer>
 void Queue<T,TContainer>::clear(){
     m_container.clear();
-    m_size = 0;
 }
 
 template <typename TValue, template <typename> typename TContainer>

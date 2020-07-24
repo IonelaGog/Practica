@@ -1,6 +1,8 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
+#include "VectorIterator.hpp"
+
 #include <cstddef>
 
 template <typename TValue>
@@ -8,9 +10,11 @@ class Vector{
     public:
         Vector();
         Vector(const Vector& rhs);
+        Vector(const Vector&& rhs);
         ~Vector();
 
         Vector& operator=(const Vector& rhs);
+        Vector& operator=(Vector&& rhs);
 
         std::size_t getSize();
         std::size_t getCapacity();
@@ -19,7 +23,7 @@ class Vector{
         void pushFront(TValue element);
         void pushBack(TValue element);
 
-        void erase(std::size_t idx);
+        void erase(VectorIterator<TValue> pos);
         void popFront();
         void popBack();
 
@@ -36,17 +40,21 @@ class Vector{
         void setBack(TValue element);
 
         void clear();
-        bool empty();
+        bool isEmpty();
 
         template <typename T>
-        friend std::ostream& operator<<(std::ostream& os, const Vector<TValue>& vec);
+        friend std::ostream& operator<<(std::ostream& os, const Vector<TValue>& task);
+
+        void reserve(std::size_t newCapacity);
+        void resize(std::size_t newSize);
+
+        VectorIterator<TValue> begin();
+        VectorIterator<TValue> end();
 
     private:
         std::size_t m_capacity;
         std::size_t m_size;
         TValue* m_data;
-
-        void reserve(std::size_t newCapacity);
 };
 
 #include "Vector.tpp"

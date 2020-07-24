@@ -4,23 +4,27 @@
 #include <cstddef>
 #include <ostream>
 #include "ListNode.hpp"
+#include "ListIterator.hpp"
 
 template <typename TValue>
 class List{
     public:
         List();
-        List(const ListNode& rhs);
+        List(const List& rhs);
+        List(const List&& rhs);
         ~List();
 
         std::size_t getSize();
 
-        ListNode& operator=(const ListNode& rhs);
+        List& operator=(const List& rhs);
+        List& operator=(const List&& rhs);
 
         void insert(std::size_t idx, TValue element);
+
         void pushFront(TValue element);
         void pushBack(TValue element);
 
-        void erase(std::size_t idx);
+        void erase(ListIterator<TValue> pos);
         void popFront();
         void popBack();
 

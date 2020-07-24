@@ -1,45 +1,62 @@
 #include "Vector.hpp"
+#include "VectorIterator.hpp"
 #include <cstdlib> 
 #include <iostream>
+constexpr std::size_t INITIAL_CAPACITY = 20;
 
 template <typename TValue>
 Vector<TValue>::Vector(){
-    for (std::size_t idx = 0; idx < Vector::getCapacity(); ++idx){
-        this->m_data[idx] = rand();
-    }
+    m_capacity = INITIAL_CAPACITY;
+    m_data = new TValue[INITIAL_CAPACITY];
+    m_size = 0;
 }
 
 template <typename TValue>
 Vector<TValue>::Vector(const Vector& rhs){
+    delete[] m_data;
     m_size = rhs.m_size;
     m_capacity = rhs.m_capacity; 
-    m_data = new T[m_capacity]; 
-    memcpy(m_data, rhs.m_data, m_capacity * sizeof(T));
+    m_data = new TValue[m_capacity]; 
+
+    std::copy(m_data, rhs.m_data, m_capacity*sizeof(TValue));
+}
+
+template <typename TValue>
+Vector<TValue>::Vector(const Vector&& rhs){
+    m_data = rhs.m_data;
+    rhs.m_data = nullptr;
+}
+
+template <typename TValue>
+Vector<TValue>& Vector<TValue>::operator=(Vector&& rhs){
+    m_capacity = rhs.m_capacity;
+    m_size = rhs.m_size;
+    m_data = rhs.m_data;
+
+    rhs.m_data = nullptr;
+    rhs.m_capacity = rhs.m_size = 0;
+    
+    return *this;
 }
 
 template <typename TValue>
 Vector<TValue>::~Vector(){
-    for (std::size_t idx = 0; idx < Vector::getCapacity(); ++idx){
-        this->m_data[idx] = 0;    
+    delete[] m_data;
+    m_data = NULL;
+}
+
+template <typename TValue>
+Vector<TValue>& Vector<TValue>::operator=(const Vector& rhs){
+    if (m_capacity != rhs.m_capacity){
+        delete[] m_data;
+        m_data = new TValue[rhs.m_capacity];
     }
-}
 
-/*
-int Vector::getElement(std::size_t idx){
-     if ((idx < 0) || (idx > m_size)){
-        std::cout << "Position isn't valid" << std::endl;
-        return 1;
-     }
-    else
-        return this->m_data[idx];
-}
+    m_capacity = rhs.m_capacity;
+    std::copy(m_data, rhs.m_data, m_capacity*sizeof(TValue));
 
-void Vector::setElement(std::size_t idx, int element){
-    if ((idx < 0) || (idx > m_size))
-        std::cout << "Position isn't valid" << std::endl;
-    else
-        this->m_data[idx] = element;
-}*/
+    return *this;
+} 
 
 template <typename TValue>
 std::size_t Vector<TValue>::getSize(){
@@ -59,7 +76,7 @@ void Vector<TValue>::insert(std::size_t idx, TValue element){
         m_size = m_size + 1;
 
         for (std::size_t id = idx; id < this->getSize()-2; ++id){
-        this->m_data[id + 1] = this->m_data[id];
+            this->m_data[id + 1] = this->m_data[id];
         }
      this->m_data[idx] = element;
     }  
@@ -67,20 +84,35 @@ void Vector<TValue>::insert(std::size_t idx, TValue element){
 
 template <typename TValue>
 void Vector<TValue>::pushFront(TValue element){
-    m_size = m_size + 1;
-
-    for (std::size_t idx = 0; idx < this->getSize()-2; ++idx){
-        this->m_data[idx + 1] = this->m_data[idx];
-    }
-
-    this->m_data[0] = element;
+    insert(0, element);
 }
 
 template <typename TValue>
 void Vector<TValue>::pushBack(TValue element){
-    m_size = m_size + 1;
     this->m_data[m_size] = element;
 }
+
+template <typename TValue>
+void Vector<TValue>::erase(VectorIterator<TValue> pos){
+    VectorIterator end = end();
+    --end;
+
+    for (VectorIterator current = pos; current != end; ++current){
+        VectorIterator next = current;
+        ++next;
+        current = next;        
+    }
+}
+
+template <typename TValue>
+void Vector<TValue>::popFront(){
+    erase(0);
+}
+
+template <typename TValue>
+void Vector<TValue>::popBack(){
+    erase(m_size-1);
+} 
 
 template <typename TValue>
 const TValue& Vector<TValue>::operator[](std::size_t idx) const{
@@ -98,38 +130,73 @@ TValue& Vector<TValue>::getBack(){
 }
 
 template <typename TValue>
+TValue& Vector<TValue>::operator[](std::size_t idx){
+    this->m_data[idx];
+}
+
+template <typename TValue>
 void Vector<TValue>::setFront(TValue element){
     this->m_data[0] = element;
 }
 
 template <typename TValue>
 void Vector<TValue>::setBack(TValue element){
-    this->m_data[m_size] = element;
+    this->m_data[m_size-1] = element;
 }
 
 template <typename TValue>
 void Vector<TValue>::clear(){
-    for (std::size_t idx = 0; idx < m_size-1; ++idx){
-        this->m_data[idx] = 0;
+  this->m_size = 0;
+}
+
+template <typename TValue>
+bool Vector<TValue>::isEmpty(){
+   return m_size == 0;
+}
+
+template <typename TValue>
+std::ostream& operator<<(std::ostream& os, const Vector<TValue>& task){
+    for(std::size_t idx = 0; idx < vec.m_size; ++idx){
+       os << vec.m_data[idx] << " ";
+    }
+    os << std::endl;
+    return os;
+}
+
+template <typename TValue>
+void Vector<TValue>::reserve(std::size_t newCapacity){
+    if(this->m_capacity < newCapacity){
+        TValue* new_data = new TValue[newCapacity]; 
+        this->m_capacity = newCapacity;
+
+        for(size_t i = 0; i < this->m_size; ++i){
+            new_data[i] = this->m_data[i];
+        }
+
+        delete[] this->m_data; 
+        this->m_data = new_data;
     }
 }
 
 template <typename TValue>
-bool Vector<TValue>::empty(){
-   /* bool flag = true;
-    int idx = 0;
-
-    while ((idx < m_size - 1) || (flag == true)){
-        if (this->m_data[idx] == 0)
-            idx = idx + 1;
-        else
-            flag = false;
+void Vector<TValue>::resize(std::size_t newSize){
+    if(newSize < 0) return;
+    if(newSize < m_capacity){
+        for(std::size_t idx = m_size; idx < newSize; ++idx){
+            m_data[idx] = TValue();
+        }
+    }else{
+        reserve((m_capacity + 1) * 2);
     }
+    m_size = newSize;
+}
 
-    return flag;*/
+template <typename TValue>
+VectorIterator<TValue> Vector<TValue>::begin(){
+    return VectorIterator<TValue>(m_data);
+}
 
-    if (this->m_size != 0)
-        return false;
-    else
-        return true;
+template <typename TValue>
+VectorIterator<TValue> Vector<TValue>::end(){
+    return VectorIterator<TValue>(m_data + m_size);
 }

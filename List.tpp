@@ -1,4 +1,5 @@
 #include "List.hpp"
+#include "ListIterator.hpp"
 #include <cstdlib>
 #include <iostream>
 
@@ -7,6 +8,30 @@ List<TValue>::List(){
     ListNode<TValue>* m_head = NULL;
     ListNode<TValue>* m_tail = NULL;
     std::size_t m_size = 0;
+}
+
+template <typename TValue>
+List<TValue>::List(const List<TValue>& rhs){
+    ListNode<TValue>* cap = m_head;
+
+    while (cap != NULL){
+        this->cap.m_data = rhs.m_data;
+        this->cap.m_prev = rhs.m_prev; 
+        this->cap.m_next = rhs.m_next;
+
+        cap = cap->getNext();
+    }
+}
+
+template <typename TValue>
+List<TValue>::List(const List&& rhs){
+    m_size = rhs.m_size;
+    m_head = rhs.m_head;
+    m_tail = rhs.m_tail;
+   
+    rhs.m_size = 0;
+    rhs.m_head = NULL;
+    rhs.m_tail = NULL;
 }
 
 template <typename TValue>
@@ -32,10 +57,14 @@ void List<TValue>::insert(std::size_t idx, TValue element){
     ListNode<TValue>* nod = new ListNode(NULL,NULL,element);
     ListNode<TValue>* cap = m_head;
 
-    if (idx == 0)
+    if (idx == 0){
         pushFront(element);
-    else if (idx == m_size)
+        return 0;
+    }
+    else if (idx == m_size){
             pushBack(element);
+            return 0;
+    }
 
     while (idx > 0){
         cap = cap->getNext();
@@ -63,7 +92,6 @@ void List<TValue>::pushFront(TValue element){
     else{
         nod->setNext(cap);
         cap->setPrev(nod);
-        coada->setData(nod);
     }
     m_size = m_size + 1;
 }
@@ -94,62 +122,56 @@ void List<TValue>::pushBack(TValue element){
 
     m_size = m_size + 1;
 }
-/*
-int List::getElement(std::size_t idx){
-    ListNode* cap = m_head;
-    std::size_t count = 0;
-    int nr = 0;
 
-    if ((idx < 0) || (idx > this->m_size-1)){
-        std::cout << "The position isn't valid" << std::endl;
-        return 1;
+template <typename TValue>
+void List<TValue>::popFront()
+{
+    ListNode<TValue>* cap = m_head;
+    m_head = m_head->getNext();
+    delete cap;
+    --m_size;
+}
+
+template <typename TValue>
+void List<TValue>::popBack(){
+    if(m_head != NULL){
+        ListNode<TValue>* cap = m_tail;
+        m_tail = m_tail->getPrev();
+        delete cap;
+        --m_size;
     }
-    else{
-        while ((cap != NULL) || (count != idx)){
-            if (count == idx)
-                nr = (int)cap->getData();
-            count = count + 1;    
-        }
-        return nr;
-    }    
-}*/
+}
 
 template <typename TValue>
 const TValue& List<TValue>::operator[](std::size_t idx) const{
-
+    ListNode<T>* cap = m_head;
+    
+    while(idx){
+        cap = cap->getNext();
+        --idx;
+    }
+    return cap->getData(); 
 }
 
 template <typename TValue>
 TValue List<TValue>::getFront(){
-    return (TValue)this->m_head;
+    return m_head->getData();
 }
 
 template <typename TValue>
 TValue List<TValue>::getBack(){
-    return (TValue)this->m_tail;
+    return m_tail->getData();
 }
-
-/*
-void List::setElement(std::size_t idx, int element){
-    ListNode* cap = m_head;
-    std::size_t count = 0;
-
-    if ((idx < 0) || (idx > this->m_size-1))
-        std::cout << "The position isn't valid" << std::endl;
-    else
-    {
-        while (cap != NULL){
-            if (count == idx)
-                cap->setData((ListNode*)element);
-            cap = cap->getNext();  
-            count = count + 1;  
-        }
-    }
-}*/
 
 template <typename TValue>
 TValue& List<TValue>::operator[](std::size_t idx){
-
+    ListNode<T>* cap = m_head;
+    
+    while(idx){
+        cap = cap->getNext();
+        --idx;
+    }
+    return cap->getData(); 
 }
 
 template <typename TValue>
@@ -159,6 +181,17 @@ ListNode<TValue>& ListNode<TValue>::operator=(const ListNode<TValue>& rhs){
     m_data = rhs.m_data;
     
     return *this;
+}
+
+template <typename TValue>
+List<TValue>& List<TValue>::operator=(const List&& rhs){
+    m_size = rhs.m_size;
+    m_head = rhs.m_head;
+    m_tail = rhs.m_tail;
+    
+    rhs.m_size = 0;
+    rhs.m_head = NULL;
+    rhs.m_tail = NULL;
 }
 
 template <typename TValue>
@@ -174,23 +207,41 @@ void List<TValue>::setBack(TValue element){
 template <typename TValue>
 void List<TValue>::clear(){
     ListNode<TValue>* cap = m_head;
+    ListNode<TValue>* cap1;
 
     while (cap != NULL){
-        cap = 0;
-        cap = cap->getNext();
+        cap1 = cap->getNext();
+        delete cap;
+        cap = cap1;
     }
+    m_size = 0;
+    m_head = 0;
+    m_tail = 0;
 }
 
 template <typename TValue>
 bool List<TValue>::isEmpty(){
-    ListNode* cap = m_head;
-    bool flag = false;
-    std::size_t count = 0;
+  return m_size == 0;
+}
 
-    while ((cap != NULL) || (count < this->m_size-1)){
-        flag = true;
-        cap = cap->getNext();
-        count = count + 1;
-    }
-    return flag;
+template<typename UValue>
+std::ostream& operator<<(std::ostream& os, const List<UValue>& task){
+   ListNode<UValue>* cap = task.m_head;
+
+   while(cap != NULL){
+       os << cap->getData() << " ";
+       cap = cap->getNext();
+   }
+    os << "\n";
+    return os;
+}
+
+template <typename TValue>
+ListIterator<TValue> List<TValue>::begin(){
+    return ListIterator<TValue>(m_head);
+}
+
+template <typename TValue>
+ListIterator<TValue> List<TValue>::end(){
+    return ListIterator<TValue>(m_tail);
 }
