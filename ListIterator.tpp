@@ -1,7 +1,7 @@
 #include "ListIterator.hpp"
 
 template <typename TValue>
-ListIterator<TValue>::ListIterator(TValue* value){
+ListIterator<TValue>::ListIterator(ListNode<TValue>* value){
     m_value = value;
 }
 
@@ -53,4 +53,20 @@ ListIterator<TValue>& ListIterator<TValue>::operator-=(std::size_t difference){
 template <typename TValue>
 TValue ListIterator<TValue>::operator*(){
     return *m_value;
+}
+
+template <typename TValue>
+ListIterator<TValue>& ListIterator<TValue>::operator+(std::size_t difference){
+    TIterator it;
+    it = m_value+difference;
+
+    return it;
+}
+
+template <typename TValue>
+ListIterator<TValue>& ListIterator<TValue>::operator-(std::size_t difference){
+    TIterator it;
+    it = m_value-difference;
+
+    return it;
 }

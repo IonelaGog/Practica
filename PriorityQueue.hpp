@@ -20,9 +20,10 @@ class PriorityQueue{
         void clear();
         bool isEmpty();
 
+        template <typename U, typename UTContainer>
         friend std::ostream& operator<<(std::ostream& os, const PriorityQueue<U, UTContainer>& task);
 
-        using TIterator = typename TContainer::TIterator;
+        using TIterator = typename TContainer<TValue>::TIterator;
 
         TIterator begin();
         TIterator end(); 

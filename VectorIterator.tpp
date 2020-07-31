@@ -51,3 +51,19 @@ template <typename TValue>
 TValue VectorIterator<TValue>::operator*(){
     return *m_value;
 }
+
+template <typename TValue>
+VectorIterator<TValue>& VectorIterator<TValue>::operator+(std::size_t difference){
+    TIterator it;
+    it.m_value = m_value+difference;
+
+    return it;
+}
+
+template <typename TValue>
+VectorIterator<TValue>& VectorIterator<TValue>::operator-(std::size_t difference){
+    TIterator it;
+    it.m_value = m_value-difference;
+
+    return it;
+}

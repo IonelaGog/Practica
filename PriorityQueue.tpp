@@ -36,13 +36,15 @@ void PriorityQueue<TValue, TContainer>::push(TValue element){
 
 template <typename TValue, template <typename> typename TContainer>
 TValue PriorityQueue<TValue, TContainer>::pop(){
-    TValue elem = m_container.getFront();
+    TValue element = m_container.getFront();
     m_container.popFront(element);
-    return elem;
+    return element;
 }
 
 template <typename TValue, template <typename> typename TContainer>
 void PriorityQueue<TValue, TContainer>::clear(){
+    std::size_t m_size;
+
     m_container.clear();
     m_size = 0;
 }

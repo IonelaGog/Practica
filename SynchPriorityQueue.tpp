@@ -1,40 +1,39 @@
-#include "SynchronizedPriorityQueue.hpp"
+#include "SynchPriorityQueue.hpp"
 
-using TIterator = typename TContainer::TIterator;
 
 template <typename TValue, typename TContainer, typename TLock>
-SynchronizedPriorityQueue<TValue, TContainer, TLock>::SynchPriorityQueue(){
+SynchPriorityQueue<TValue, TContainer, TLock>::SynchPriorityQueue(){
 
 }
 
 template <typename TValue, typename TContainer, typename TLock>
-SynchronizedPriorityQueue<TValue, TContainer, TLock>::SynchPriorityQueue(const SynchronizedPriorityQueue& rhs){
+SynchPriorityQueue<TValue, TContainer, TLock>::SynchPriorityQueue(const SynchPriorityQueue& rhs){
     m_lock.lock();
     m_container = rhs.m_container;
     m_lock.unlock();
 }
 
 template <typename TValue, typename TContainer, typename TLock>
-SynchronizedPriorityQueue<TValue, TContainer, TLock>::~SynchPriorityQueue(){
+SynchPriorityQueue<TValue, TContainer, TLock>::~SynchPriorityQueue(){
     
 }
 
 template <typename TValue, typename TContainer, typename TLock>
-SynchronizedPriorityQueue<TValue, TContainer, TLock>& SynchronizedPriorityQueue<TValue, TContainer, TLock>::operator=(const SynchronizedPriorityQueue& rhs){
+SynchPriorityQueue<TValue, TContainer, TLock>& SynchPriorityQueue<TValue, TContainer, TLock>::operator=(const SynchPriorityQueue& rhs){
     m_lock.lock();
     m_container = rhs.m_container;
     m_lock.unlock();
 }
 
 template <typename TValue, typename TContainer, typename TLock>
-std::size_t SynchronizedPriorityQueue<TValue, TContainer, TLock>::getSize(){
+std::size_t SynchPriorityQueue<TValue, TContainer, TLock>::getSize(){
     m_lock.lock();
     return m_container.getSize();
     m_lock.unlock();
 }
 
 template <typename TValue, typename TContainer, typename TLock>
-void SynchronizedPriorityQueue<TValue, TContainer, TLock>::push(TValue element){
+void SynchPriorityQueue<TValue, TContainer, TLock>::push(TValue element){
     std::size_t poz = 0;
    
     m_lock.lock();
@@ -48,7 +47,7 @@ void SynchronizedPriorityQueue<TValue, TContainer, TLock>::push(TValue element){
 }
 
 template <typename TValue, typename TContainer, typename TLock>
-TValue SynchronizedPriorityQueue<TValue, TContainer, TLock>::pop(){
+TValue SynchPriorityQueue<TValue, TContainer, TLock>::pop(){
     m_lock.lock();
     TValue val = m_container.getBack();
     m_container.popBack();
@@ -58,7 +57,7 @@ TValue SynchronizedPriorityQueue<TValue, TContainer, TLock>::pop(){
 }
 
 template <typename TValue, typename TContainer, typename TLock>
-bool SynchronizedPriorityQueue<TValue, TContainer, TLock>::tryPop(TValue element){
+bool SynchPriorityQueue<TValue, TContainer, TLock>::tryPop(TValue element){
     if(!m_container.isEmpty()){
         value = m_container.pop();
         return true;
@@ -67,35 +66,35 @@ bool SynchronizedPriorityQueue<TValue, TContainer, TLock>::tryPop(TValue element
 }
 
 template <typename TValue, typename TContainer, typename TLock>
-void SynchronizedPriorityQueue<TValue, TContainer, TLock>::clear(){
+void SynchPriorityQueue<TValue, TContainer, TLock>::clear(){
     m_lock.lock();
     m_container = 0;
     m_lock.unlock();
 }
 
 template <typename TValue, typename TContainer, typename TLock>
-bool SynchronizedPriorityQueue<TValue, TContainer, TLock>::isEmpty(){
+bool SynchPriorityQueue<TValue, TContainer, TLock>::isEmpty(){
     m_lock.lock();
     return m_container.isEmpty();
     m_lock.unlock();
 }
 
 template <typename UValue, typename UContainer, typename ULock>
-std::ostream& operator<<(std::ostream& os, const SynchronizedPriorityQueue<UValue, UContainer, ULock>& task)
+std::ostream& operator<<(std::ostream& os, const SynchPriorityQueue<UValue, UContainer, ULock>& task)
 {
     os << task.m_container;
     return os;
 }
 
 template <typename TValue, typename TContainer, typename TLock>
-TIterator SynchronizedPriorityQueue<TValue, TContainer, TLock>::begin(){
+TIterator SynchPriorityQueue<TValue, TContainer, TLock>::begin(){
     m_lock.lock();
     return TIterator<TValue>(m_container);
     m_lock.unlock();
 }
 
 template <typename TValue, typename TContainer, typename TLock>
-TIterator SynchronizedPriorityQueue<TValue, TContainer, TLock>::end(){
+TIterator SynchPriorityQueue<TValue, TContainer, TLock>::end(){
     m_lock.lock();
     return TIterator<TValue>(m_size+m_container);
     m_lock.unlock();

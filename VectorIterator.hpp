@@ -6,6 +6,8 @@
 template <typename TValue>
 class VectorIterator{
     public:
+        using TIterator = VectorIterator<TValue>::TIterator;
+
         VectorIterator(TValue* value);
         VectorIterator(const VectorIterator& rhs);
 
@@ -19,6 +21,9 @@ class VectorIterator{
 
         VectorIterator& operator+=(std::size_t difference);
         VectorIterator& operator-=(std::size_t difference);
+
+        VectorIterator& operator+(std::size_t difference);
+        VectorIterator& operator-(std::size_t difference);
 
         TValue operator*();
 

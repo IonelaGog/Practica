@@ -53,7 +53,7 @@ std::size_t List<TValue>::getSize(){
 }
 
 template <typename TValue>
-void List<TValue>::insert(std::size_t idx, TValue element){
+void List<TValue>::insert(TIterator pos, TValue element){
     ListNode<TValue>* nod = new ListNode(NULL,NULL,element);
     ListNode<TValue>* cap = m_head;
 
@@ -237,11 +237,11 @@ std::ostream& operator<<(std::ostream& os, const List<UValue>& task){
 }
 
 template <typename TValue>
-ListIterator<TValue> List<TValue>::begin(){
+TIterator List<TValue>::begin(){
     return ListIterator<TValue>(m_head);
 }
 
 template <typename TValue>
-ListIterator<TValue> List<TValue>::end(){
+TIterator List<TValue>::end(){
     return ListIterator<TValue>(m_tail);
 }

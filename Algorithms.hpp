@@ -51,7 +51,7 @@ namespace pdv{
         std::size_t cnt = 0;
         
         for (TInputIt it = first; it != last; ++it){
-            if(*first == value){
+            if(*it == value){
                 ++cnt;
             }
         }
@@ -63,7 +63,7 @@ namespace pdv{
         std::size_t cnt = 0;
         
         for (TInputIt it = first; it != last; ++it){
-            if(pred(*first)){
+            if(pred(*it)){
                 ++cnt;
             }
         }
@@ -73,13 +73,20 @@ namespace pdv{
     template <typename TInputIt, typename TOutputIt, typename TValue>
     void fill(TInputIt first, TInputIt last, TValue value){
         for (TInputIt it = first; it != last; ++it){
-            *first = value;
+            *it = value;
         }
     }
 
     template <typename TInputIt, typename TOutputIt, typename TComparator>
     void sort(TInputIt first, TInputIt last, TComparator comp){
-        //
+
+        for (TInputIt i = first; first != last-1; ++first){
+            for (TInputIt j = i+1; j != last; ++j){
+                if (comp(*i, *j)){
+                    std::swap(*i, *j);
+                }
+            }
+        }
     }
 
     template <typename TLhsInputIt, typename TInputIt, typename TRhsInputIt>
@@ -97,45 +104,45 @@ namespace pdv{
     template <typename TInputIt, typename TOutputIt, typename TPredicate>
     bool anyOf(TInputIt first, TInputIt last, TPredicate pred){
         for (TInputIt it = first; it != last; ++it){
-            if(pred(*first)){
+            if(pred(*it)){
                 return true;
             }
         }
-        return initValue;
+        return false;
     }
 
     template <typename TInputIt, typename TOutputIt, typename TPredicate>
     bool allOf(TInputIt first, TInputIt last, TPredicate pred){
         for (TInputIt it = first; it != last; ++it){
-             if(!pred(*first)){
+             if(!pred(*it)){
                 return false;
             }
         }
-        return initValue;
+        return true;
     }
 
     template <typename TInputIt, typename TOutputIt, typename TPredicate>
     bool noneOf(TInputIt first, TInputIt last, TPredicate pred){
         for (TInputIt it = first; it != last; ++it){
-            if(pred(*first)){
+            if(pred(*it)){
                 return false;
             }
         }
-        return initValue;
+        return true;
     }
 
     template <typename TInputIt, typename TOutputIt, typename TUnaryFunc>
     TOutputIt transform(TInputIt first, TInputIt last, TOutputIt output, TUnaryFunc func){
         for (TInputIt it = first; it != last; ++it){
-            *output++ = func(*first);
+            *output++ = func(*it);
         }
-        return initValue;
+        return output;
     }
 
     template <typename TInputIt, typename TOutputIt, typename TValue, typename TBinaryFunc>
     TValue reduce(TInputIt first, TInputIt last, TValue initValue, TBinaryFunc func){
         for (TInputIt it = first; it != last; ++it){
-            initValue = func(*first, initValue);
+            initValue = func(*it, initValue);
         }
         return initValue;
     }

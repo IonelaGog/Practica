@@ -7,7 +7,10 @@
 template <typename TValue>
 class ListIterator{
     public:
-        ListIterator(TValue* value);
+
+        using TIterator = ListIterator<TValue>::TIterator;
+
+        ListIterator(ListNode<TValue>* value);
         ListIterator(const ListIterator& rhs);
 
         ListIterator& operator=(const ListIterator& rhs);
@@ -21,10 +24,13 @@ class ListIterator{
         ListIterator& operator+=(std::size_t difference);
         ListIterator& operator-=(std::size_t difference);
 
+        ListIterator& operator+(std::size_t difference);
+        ListIterator& operator-(std::size_t difference);
+
         TValue operator*();
 
     private:    
-        TValue* m_value;
+        ListNode<TValue>* m_value;
 };
 
 #include "ListIterator.tpp"

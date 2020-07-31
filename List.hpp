@@ -9,6 +9,8 @@
 template <typename TValue>
 class List{
     public:
+        using TIterator = ListIterator<TValue>::TIterator;
+
         List();
         List(const List& rhs);
         List(const List&& rhs);
@@ -19,12 +21,12 @@ class List{
         List& operator=(const List& rhs);
         List& operator=(const List&& rhs);
 
-        void insert(std::size_t idx, TValue element);
+        void insert(TIterator pos, TValue element);
 
         void pushFront(TValue element);
         void pushBack(TValue element);
 
-        void erase(ListIterator<TValue> pos);
+        void erase(TIterator pos);
         void popFront();
         void popBack();
 
@@ -43,8 +45,8 @@ class List{
 
         friend std::ostream& operator<<(std::ostream& os, const List& task); 
 
-        ListIterator<TValue> begin();
-        ListIterator<TValue> end();
+        TIterator begin();
+        TIterator end();
         
     private:
         std::size_t m_size;

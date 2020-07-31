@@ -8,6 +8,9 @@
 template <typename TValue>
 class Vector{
     public:
+
+        using TIterator = VectorIterator<TValue>;
+
         Vector();
         Vector(const Vector& rhs);
         Vector(const Vector&& rhs);
@@ -19,11 +22,11 @@ class Vector{
         std::size_t getSize();
         std::size_t getCapacity();
 
-        void insert(std::size_t idx, TValue element);
+        void insert(TIterator pos, TValue element);
         void pushFront(TValue element);
         void pushBack(TValue element);
 
-        void erase(VectorIterator<TValue> pos);
+        void erase(TIterator pos);
         void popFront();
         void popBack();
 
@@ -48,8 +51,8 @@ class Vector{
         void reserve(std::size_t newCapacity);
         void resize(std::size_t newSize);
 
-        VectorIterator<TValue> begin();
-        VectorIterator<TValue> end();
+        TIterator begin();
+        TIterator end();
 
     private:
         std::size_t m_capacity;

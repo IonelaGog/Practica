@@ -23,7 +23,7 @@ class Queue{
         template <typename T>
         friend std::ostream& operator<<(std::ostream& os, const Queue<TValue,TContainer>& task);
 
-        using TIterator = typename TContainer::TIterator;
+        using TIterator = typename TContainer<TValue>::TIterator;
 
         TIterator begin();
         TIterator end();

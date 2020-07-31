@@ -69,18 +69,18 @@ std::size_t Vector<TValue>::getCapacity(){
 }
 
 template <typename TValue>
-void Vector<TValue>::insert(std::size_t idx, TValue element){
-    if ((idx < 0) || (idx > m_size))
-        std::cout << "Position isn't valid" << std::endl;
-    else{
-        m_size = m_size + 1;
+void Vector<TValue>::insert(TIterator pos, TValue element){
+   if(m_size==m_capacity){
+        reserve((1+m_capacity)*2);
+    }
 
-        for (std::size_t id = idx; id < this->getSize()-2; ++id){
-            this->m_data[id + 1] = this->m_data[id];
-        }
-     this->m_data[idx] = element;
-    }  
-}
+    for (TIterator current = ipos+1; current != end(); ++current){
+        *current = *(current-1);
+    }
+      
+    this->m_size++;
+    this->m_data[ipos]=element;
+}  
 
 template <typename TValue>
 void Vector<TValue>::pushFront(TValue element){
@@ -93,12 +93,11 @@ void Vector<TValue>::pushBack(TValue element){
 }
 
 template <typename TValue>
-void Vector<TValue>::erase(VectorIterator<TValue> pos){
-    VectorIterator end = end();
-    --end;
+void Vector<TValue>::erase(TIterator pos){
+    TIterator end = end();
 
-    for (VectorIterator current = pos; current != end; ++current){
-        VectorIterator next = current;
+    for (TIterator current = pos; current != end; ++current){
+        TIterator next = current;
         ++next;
         current = next;        
     }
@@ -156,8 +155,8 @@ bool Vector<TValue>::isEmpty(){
 
 template <typename TValue>
 std::ostream& operator<<(std::ostream& os, const Vector<TValue>& task){
-    for(std::size_t idx = 0; idx < vec.m_size; ++idx){
-       os << vec.m_data[idx] << " ";
+    for(std::size_t idx = 0; idx < task.m_size; ++idx){
+       os << task.m_data[idx] << " ";
     }
     os << std::endl;
     return os;
@@ -192,11 +191,11 @@ void Vector<TValue>::resize(std::size_t newSize){
 }
 
 template <typename TValue>
-VectorIterator<TValue> Vector<TValue>::begin(){
+TIterator Vector<TValue>::begin(){
     return VectorIterator<TValue>(m_data);
 }
 
 template <typename TValue>
-VectorIterator<TValue> Vector<TValue>::end(){
+TIterator Vector<TValue>::end(){
     return VectorIterator<TValue>(m_data + m_size);
 }
