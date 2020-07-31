@@ -6,60 +6,63 @@
 #include <cstddef>
 
 template <typename TValue>
-class Vector{
-    public:
+class Vector
+{
+public:
+    using TIterator = VectorIterator<TValue>;
 
-        using TIterator = VectorIterator<TValue>;
+    Vector();
+    Vector(const Vector &rhs);
+    Vector(const Vector &&rhs);
+    ~Vector();
 
-        Vector();
-        Vector(const Vector& rhs);
-        Vector(const Vector&& rhs);
-        ~Vector();
+    Vector &operator=(const Vector &rhs);
+    Vector &operator=(Vector &&rhs);
 
-        Vector& operator=(const Vector& rhs);
-        Vector& operator=(Vector&& rhs);
+    std::size_t getSize();
+    std::size_t getCapacity();
 
-        std::size_t getSize();
-        std::size_t getCapacity();
+    void insert(TIterator pos, const TValue& element);
+    void insert(TIterator pos, TValue&& element);
 
-        void insert(TIterator pos, TValue element);
-        void pushFront(TValue element);
-        void pushBack(TValue element);
+    void pushFront(TValue element);
+    void pushBack(const TValue &element);
+    void pushBack(TValue &&element);
 
-        void erase(TIterator pos);
-        void popFront();
-        void popBack();
+    void erase(TIterator pos);
+    void popFront();
+    void popBack();
 
-        //int getElement(std::size_t idx); - replaced by: 
-        const TValue& operator[](std::size_t idx) const;
+    //int getElement(std::size_t idx); - replaced by:
+    const TValue &operator[](std::size_t idx) const;
 
-        TValue& getFront();
-        TValue& getBack();
+    TValue &getFront();
+    TValue &getBack();
 
-        //void setElement(std::size_t idx, int element); - replaced by:
-        TValue& operator[](std::size_t idx);
+    //void setElement(std::size_t idx, int element); - replaced by:
+    TValue &operator[](std::size_t idx);
 
-        void setFront(TValue element);
-        void setBack(TValue element);
+    void setFront(TValue element);
+    void setBack(TValue element);
 
-        void clear();
-        bool isEmpty();
+    void clear();
+    bool isEmpty();
 
-        template <typename T>
-        friend std::ostream& operator<<(std::ostream& os, const Vector<TValue>& task);
+    template <typename T>
+    friend std::ostream &operator<<(std::ostream &os, const Vector<TValue> &task);
 
-        void reserve(std::size_t newCapacity);
-        void resize(std::size_t newSize);
+    void reserve(std::size_t newCapacity);
+    void resize(std::size_t newSize);
 
-        TIterator begin();
-        TIterator end();
+    TIterator begin();
+    TIterator end();
 
-    private:
-        std::size_t m_capacity;
-        std::size_t m_size;
-        TValue* m_data;
+private:
+    std::size_t m_capacity;
+    std::size_t m_size;
+    TValue *m_data;
 };
 
 #include "Vector.tpp"
 
-#endif// VECTOR_HPP
+#endif // VECTOR_HPP

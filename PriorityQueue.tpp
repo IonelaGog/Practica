@@ -30,7 +30,6 @@ std::size_t PriorityQueue<TValue, TContainer>::getSize(){
 
 template <typename TValue, template <typename> typename TContainer>
 void PriorityQueue<TValue, TContainer>::push(TValue element){
-    TValue 
     m_container.pushBack(element);
 }
 

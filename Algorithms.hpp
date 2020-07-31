@@ -14,6 +14,15 @@ namespace pdv{
         return output;
     }
 
+    template <typename TInputIt, typename TOutputIt>
+    TOutputIt move(TInputIt first, TInputIt last, TOutputIt output){
+        for (TInputIt it = first; it != last; ++it){
+          *output++ = std::move(*it);
+        }
+        
+        return output;
+    }
+
     template <typename TInputIt, typename TOutputIt, typename TPredicate>
     TOutputIt copyIf(TInputIt first, TInputIt last, TOutputIt output, TPredicate pred){
         for (TInputIt it = first; it != last; ++it){

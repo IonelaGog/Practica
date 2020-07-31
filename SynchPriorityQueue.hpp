@@ -8,36 +8,38 @@
 #include "PriorityQueue.hpp"
 #include <thread>
 
-
 template <typename TValue, typename TContainer = Vector<TValue>, typename TLock = std::mutex>
-class SynchPriorityQueue{
-    public:
-        using TIterator = typename TContainer<TValue>::TIterator;
+class SynchPriorityQueue
+{
+public:
+    using TIterator = typename TContainer::TIterator;
 
-        SynchPriorityQueue();
-        SynchPriorityQueue(const SynchPriorityQueue& rhs);
-        ~SynchPriorityQueue();
+    SynchPriorityQueue();
+    SynchPriorityQueue(const SynchPriorityQueue &rhs);
+    ~SynchPriorityQueue();
 
-        SynchPriorityQueue& operator=(const SynchPriorityQueue& rhs);
+    SynchPriorityQueue &operator=(const SynchPriorityQueue &rhs);
 
-        std::size_t getSize();
+    std::size_t getSize();
 
-        void push(TValue element);
-        TValue pop();
-        bool tryPop(TValue element);
+    void push(const TValue &element);
+    void push(TValue &&element);
 
-        void clear();
-        bool isEmpty();
+    TValue pop();
+    bool tryPop(TValue &element);
 
-        template <typename UValue, typename UContainer, typename ULock>
-        friend std::ostream& operator<<(std::ostream& os, const SynchPriorityQueue<UValue, UContainer, ULock>& task);
+    void clear();
+    bool isEmpty();
 
-        TIterator begin();
-        TIterator end();
+    template <typename UValue, typename UContainer, typename ULock>
+    friend std::ostream &operator<<(std::ostream &os, const SynchPriorityQueue<UValue, UContainer, ULock> &task);
 
-    private:
-        TContainer<TValue> m_container;
-        TLock m_lock;       
+    auto begin();
+    auto end();
+
+private:
+    TContainer m_container;
+    TLock m_lock;
 };
 
 #include "SynchPriorityQueue.tpp"
