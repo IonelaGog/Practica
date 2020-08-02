@@ -1,33 +1,36 @@
 #ifndef TASK_HPP
 #define TASK_HPP
 
-#include <cstddef>
+#include <future>
 #include <string>
+#include <cstddef>
 #include <ostream>
 
 #include "TaskArgument.hpp"
 #include "TaskResult.hpp"
+#include "Function.hpp"
 
-class Task{
-    public:
-        Task(std::string description, int8_t priority);
+class Task
+{
+public:
+    Task() = default;
 
-        std::string getDescription();
-        int8_t getPriority();
+    Task(std::int64_t prio, std::packaged_task<TaskResult()> &&pt);
 
-        bool operator<(const Task& rhs);
-        TaskResult operator()(TaskArgument rez);
+    std::int64_t getPriority();
 
-        Task(std::int64_t prio, function <TaskResult(TaskArgument)> func); 
+    bool operator<(const Task &rhs);
+    // bool operator<(Task &&rhs);
 
-        friend std::ostream& operator<<(std::ostream& os, const Task& task);
+    void operator()();
 
-    private:
-        std::string m_description;
-        int64_t m_priority;
-        function <TaskResult(TaskArgument)> m_function;
+    friend std::ostream &operator<<(std::ostream &os, const Task &task);
+
+private:
+    int64_t m_priority;
+    Function<void()> m_function;
 };
 
 #include "Task.tpp"
 
-#endif//TASK_HPP
+#endif //TASK_HPP
