@@ -9,10 +9,6 @@ ListNode<TValue>::ListNode(ListNode*prev, ListNode* next, TValue data){
     m_next = next;
 }
 
-template <typename TValue>
-ListNode<TValue>::ListNode(const ListNode& rhs){
-    
-}
 
 template <typename TValue>
 ListNode<TValue>::~ListNode(){

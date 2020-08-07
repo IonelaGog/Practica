@@ -57,16 +57,16 @@ TValue ListIterator<TValue>::operator*(){
 
 template <typename TValue>
 ListIterator<TValue>& ListIterator<TValue>::operator+(std::size_t difference){
-    TIterator it;
-    it = m_value+difference;
+    ListIterator<TValue> it;
+    it += difference;
 
     return it;
 }
 
 template <typename TValue>
 ListIterator<TValue>& ListIterator<TValue>::operator-(std::size_t difference){
-    TIterator it;
-    it = m_value-difference;
+    ListIterator<TValue> it;
+    it -= difference;
 
     return it;
 }

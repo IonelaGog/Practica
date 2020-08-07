@@ -29,7 +29,7 @@ class Queue{
         TIterator end();
 
     private:
-        TContainer m_container;    
+        TContainer<TValue> m_container;    
 };
 
 #include "Queue.tpp"

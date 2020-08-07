@@ -2,11 +2,6 @@ cmake_minimum_required(VERSION 3.10.0)
 
 project(practica)
 
-
-set(CMAKE_CXX_COMPILER g++)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -Wall -Wextra -Wpedantic -Werror ") #-fsanitize=address -g
-
-
 ### Local Variables ###
 
 set(SOURCES
@@ -45,8 +40,15 @@ set(INCLUDE_DIRECTORIES
 
 ### Main Target ###
 
-add_executable(${PROJECT_NAME} ${SOURCES})
-target_include_directories(${PROJECT_NAME} ${INCLUDE_DIRECTORIES})
+add_executable(RELEASE ${SOURCES})
+target_compile_options(RELEASE PUBLIC -std=c++20 -Wall -Wextra -Wpedantic -Werror -O3 -pthread)
+target_include_directories(RELEASE ${INCLUDE_DIRECTORIES})
+target_link_libraries(RELEASE PRIVATE -lpthread)
 
+
+add_executable(DEBUG ${SOURCES})
+target_compile_options(DEBUG PUBLIC -std=c++20 -Wall -Wextra -Wpedantic -Werror -Og -g -pthread)
+target_include_directories(DEBUG ${INCLUDE_DIRECTORIES})
+target_link_libraries(DEBUG PRIVATE -lpthread)
 
 ### Custom Targets ###

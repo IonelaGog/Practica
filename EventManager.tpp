@@ -6,7 +6,8 @@
 #include <functional>
 #include <map>
 
-void subscribe(EventType eventType, THandler handler)
+template <typename TEventType, typename THanlder>
+void EventManager<TEventType, THandler>::subscribe(TEventType eventType, THandler handler)
 {
     //add the handler int he handler map
     if (!m_handlers.contains(eventType))
@@ -17,7 +18,8 @@ void subscribe(EventType eventType, THandler handler)
     m_handlers[eventType].push_back(handler);
 }
 
-void fire(EventType eventType, EventPayload payload)
+template <typename TEventType, typename THanlder>
+void EventManager<TEventType, THandler>::fire(TEventType eventType, EventPayload payload)
 {
     for (auto& handler : m_handlers[eventType])
     {

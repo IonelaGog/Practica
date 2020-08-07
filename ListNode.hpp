@@ -1,5 +1,5 @@
-#ifndef LIST_NODE.HPP
-#define LIST_NODE.HPP
+#ifndef LIST_NODE_HPP
+#define LIST_NODE_HPP
 
 #include <cstddef>
 
@@ -7,7 +7,7 @@ template <typename TValue>
 class ListNode{
     public:
         ListNode(ListNode* prev, ListNode* next, TValue data);
-        ListNode(const ListNode& rhs);
+        ListNode(const ListNode& rhs) = default;
         ~ListNode();
 
         ListNode& operator=(const ListNode& rhs);
@@ -21,8 +21,8 @@ class ListNode{
         TValue getData();
         void setData(ListNode* data);
         
-        template <typename TValue>
-        friend std::ostream& operator<<(std::ostream& os, const ListNode<TValue>& task); 
+        template <typename UValue>
+        friend std::ostream& operator<<(std::ostream& os, const ListNode<UValue>& task); 
 
     private:
         ListNode* m_prev;

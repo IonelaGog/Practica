@@ -100,8 +100,8 @@ namespace pdv{
 
     template <typename TLhsInputIt, typename TInputIt, typename TRhsInputIt>
     bool equal(TLhsInputIt lhsFirst, TInputIt lhsLast, TRhsInputIt rhsFirst){
-        for(TLhsInputIt itL = lhsFirst; itL != rhsFirst; ++itL){
-            for(TRhsInputIt itR = rhsFirst; itR != lhsFirst; ++itR){
+        for(TLhsInputIt itL = lhsFirst; itL != lhsLast; ++itL){
+            for(TRhsInputIt itR = rhsFirst; itR != lhsLast; ++itR){
                 if(!(*itL == *itR)){
                     return false;
                 }

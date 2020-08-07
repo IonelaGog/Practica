@@ -5,9 +5,9 @@
 
 template <typename TValue>
 List<TValue>::List(){
-    ListNode<TValue>* m_head = NULL;
-    ListNode<TValue>* m_tail = NULL;
-    std::size_t m_size = 0;
+    m_head = nullptr;
+    m_tail = nullptr;
+    m_size = 0;
 }
 
 template <typename TValue>
@@ -37,11 +37,12 @@ List<TValue>::List(const List&& rhs){
 template <typename TValue>
 List<TValue>::~List(){
     ListNode<TValue>* cap = m_head;
+    ListNode<TValue>* temp;
 
     while (cap != NULL){
         temp = cap;
         cap = cap->getNext();
-        delete(temp);
+        delete temp;
     }
     m_head = NULL;
     m_tail = NULL;
@@ -57,18 +58,16 @@ void List<TValue>::insert(TIterator pos, TValue element){
     ListNode<TValue>* nod = new ListNode(NULL,NULL,element);
     ListNode<TValue>* cap = m_head;
 
-    if (idx == 0){
+    if (pos == begin()){
         pushFront(element);
-        return 0;
     }
-    else if (idx == m_size){
+    else if (pos == end()){
             pushBack(element);
-            return 0;
     }
 
-    while (idx > 0){
+    cap = m_head;
+    for (auto it = begin(); it!= pos; ++it){
         cap = cap->getNext();
-        idx = idx - 1;
     }     
 
     cap->getPrev()->setNext(nod);
@@ -144,7 +143,7 @@ void List<TValue>::popBack(){
 
 template <typename TValue>
 const TValue& List<TValue>::operator[](std::size_t idx) const{
-    ListNode<T>* cap = m_head;
+    ListNode<TValue>* cap = m_head;
     
     while(idx){
         cap = cap->getNext();
@@ -165,7 +164,7 @@ TValue List<TValue>::getBack(){
 
 template <typename TValue>
 TValue& List<TValue>::operator[](std::size_t idx){
-    ListNode<T>* cap = m_head;
+    ListNode<TValue>* cap = m_head;
     
     while(idx){
         cap = cap->getNext();
@@ -237,11 +236,11 @@ std::ostream& operator<<(std::ostream& os, const List<UValue>& task){
 }
 
 template <typename TValue>
-TIterator List<TValue>::begin(){
+auto List<TValue>::begin(){
     return ListIterator<TValue>(m_head);
 }
 
 template <typename TValue>
-TIterator List<TValue>::end(){
+auto List<TValue>::end(){
     return ListIterator<TValue>(m_tail);
 }

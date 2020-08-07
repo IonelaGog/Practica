@@ -9,7 +9,7 @@
 template <typename TValue>
 class List{
     public:
-        using TIterator = ListIterator<TValue>::TIterator;
+        using TIterator = ListIterator<TValue>;
 
         List();
         List(const List& rhs);
@@ -45,8 +45,8 @@ class List{
 
         friend std::ostream& operator<<(std::ostream& os, const List& task); 
 
-        TIterator begin();
-        TIterator end();
+        auto begin();
+        auto end();
         
     private:
         std::size_t m_size;

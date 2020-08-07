@@ -8,8 +8,6 @@ template <typename TValue>
 class ListIterator{
     public:
 
-        using TIterator = ListIterator<TValue>::TIterator;
-
         ListIterator(ListNode<TValue>* value);
         ListIterator(const ListIterator& rhs);
 

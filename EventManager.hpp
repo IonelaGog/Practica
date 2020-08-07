@@ -9,15 +9,16 @@
 #include "EventType.hpp"
 #include "Vector.hpp"
 
+template <typename TEventType, typename THandler>
 class EventManager
 {
   public:
-    void subscribe(EventType type, THandler handler);
-    void fire(EventType type, EventPayload payload);
+    void subscribe(TEventType type, THandler handler);
+    void fire(TEventType type, EventPayload payload);
 
   private:
     std::function<void(const EventPayload&)> THandler;
-    map<EventType, Vector<THandler>> m_handlers;
+    std::map<TEventType, Vector<THandler>> m_handlers;
 };
 
 #include "EventManager.tpp"
